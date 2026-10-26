@@ -1,0 +1,12 @@
+name = "proapp-vault-media"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "REPLACE_WITH_YOUR_R2_BUCKET_NAME"
+
+[vars]
+# Set ADMIN_UIDS and FIREBASE_PROJECT_ID as Worker secrets/vars in Cloudflare dashboard.
+# MEDIA_PUBLIC_BASE should be a public R2 custom domain, e.g. https://media.example.com
+MEDIA_PUBLIC_BASE = "https://REPLACE_WITH_YOUR_MEDIA_DOMAIN"

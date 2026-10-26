@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ProApp Vault</title>
+<style>
+:root{--bg:#0b0d14;--panel:#141826;--panel2:#1b2133;--text:#f4f6ff;--muted:#9da8c2;--accent:#7c5cff;--accent2:#20d6c7;--line:#2a3248;--danger:#ff657a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1000px 600px at 10% -10%,#24204e 0%,transparent 55%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;background:var(--accent);color:white;font-weight:700}button.secondary{background:var(--panel2);border:1px solid var(--line)}button.danger{background:#612536}button:disabled{opacity:.5;cursor:not-allowed}input,textarea,select{width:100%;background:#0f1320;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px;outline:none}textarea{min-height:84px}a{color:#a9a0ff}.wrap{max-width:1180px;margin:auto;padding:16px}.top{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}.brand{font-size:23px;font-weight:900;letter-spacing:-.5px}.brand span{color:var(--accent2)}.search{flex:1;min-width:180px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.grow{flex:1}.muted{color:var(--muted)}.panel{background:linear-gradient(145deg,#171c2c,#111521);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:0 12px 35px #0002}.section-title{font-size:18px;font-weight:800;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.video-card{overflow:hidden;border:1px solid var(--line);background:var(--panel);border-radius:15px;cursor:pointer}.thumb{width:100%;aspect-ratio:16/10;object-fit:cover;background:#22283b;display:block}.card-body{padding:10px}.card-title{font-weight:750;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.small{font-size:12px;color:var(--muted)}.hidden{display:none!important}.nav{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.nav button{background:#171c2c;border:1px solid var(--line)}.nav button.active{background:var(--accent)}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.stat{padding:14px;background:var(--panel2);border-radius:14px;border:1px solid var(--line)}.stat strong{font-size:24px;display:block}.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.field{display:grid;gap:6px;margin-bottom:10px}.status{padding:9px 12px;border-radius:10px;background:#182a2a;color:#9df2dc;margin:8px 0}.error{background:#3a1b27;color:#ffb2c0}.adbox{border:1px dashed #59617d;border-radius:14px;padding:14px;text-align:center;min-height:70px;background:#101522}.player{width:100%;max-height:65vh;background:#000;border-radius:14px}.modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:16px;z-index:10;overflow:auto}.modal-inner{width:min(720px,100%);max-height:92vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}.listrow{padding:10px 0;border-bottom:1px solid var(--line)}.tag{display:inline-block;padding:3px 8px;border-radius:99px;background:#262345;color:#c8c1ff;font-size:12px}.footer{padding:20px 0;text-align:center;color:var(--muted);font-size:12px}@media(min-width:800px){.wrap{padding:24px}.grid{grid-template-columns:repeat(auto-fill,minmax(205px,1fr))}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">ProApp <span>Vault</span></div>
+    <input id="search" class="search" placeholder="ভিডিও খুঁজুন..." aria-label="Search videos">
+    <button id="loginBtn">Login / Sign up</button>
+    <button id="adminBtn" class="secondary hidden">Admin Panel</button>
+    <button id="logoutBtn" class="secondary hidden">Logout</button>
+  </header>
+  <div id="status" class="status hidden"></div>
+  <section class="panel">
+    <h2 class="section-title">🔥 সবচেয়ে বেশি দেখা</h2>
+    <div id="popular" class="grid"><div class="muted">ভিডিও লোড হচ্ছে…</div></div>
+  </section>
+  <section id="homeAdPanel" class="panel">
+    <h2 class="section-title">Sponsored</h2>
+    <div id="homeAd" class="adbox">বিজ্ঞাপন লোড হচ্ছে…</div>
+  </section>
+  <section class="panel">
+    <div class="row"><h2 class="section-title grow">সব ভিডিও</h2><span id="videoCount" class="tag">0 videos</span></div>
+    <div id="videos" class="grid"><div class="muted">ভিডিও লোড হচ্ছে…</div></div>
+  </section>
+  <section id="adminPanel" class="panel hidden">
+    <div class="row"><h2 class="section-title grow">Admin Dashboard</h2><button id="closeAdmin" class="secondary">বন্ধ করুন</button></div>
+    <div class="stats">
+      <div class="stat"><span class="muted">Total Users</span><strong id="statUsers">—</strong></div>
+      <div class="stat"><span class="muted">Total Videos</span><strong id="statVideos">—</strong></div>
+      <div class="stat"><span class="muted">Total Views</span><strong id="statViews">—</strong></div>
+      <div class="stat"><span class="muted">Total Likes</span><strong id="statLikes">—</strong></div>
+      <div class="stat"><span class="muted">Total Comments</span><strong id="statComments">—</strong></div>
+    </div>
+    <div class="nav">
+      <button class="active" data-tab="manageVideos">ভিডিও ম্যানেজ</button>
+      <button data-tab="adSettings">বিজ্ঞাপন ও লেখা</button>
+      <button data-tab="uploadMedia">ভিডিও আপলোড</button>
+    </div>
+    <div id="manageVideos" class="adminTab">
+      <h3>ভিডিও যোগ / সম্পাদনা</h3>
+      <div class="two">
+        <div>
+          <div class="field"><label>ভিডিও ID (edit করলে)</label><input id="editVideoId" placeholder="ফাঁকা রাখলে নতুন ভিডিও"></div>
+          <div class="field"><label>ভিডিওর নাম</label><input id="vTitle" placeholder="ভিডিও টাইটেল"></div>
+          <div class="field"><label>বর্ণনা</label><textarea id="vDescription" placeholder="বর্ণনা"></textarea></div>
+          <div class="field"><label>ভিডিও URL (R2 public/custom domain বা অনুমোদিত URL)</label><input id="vUrl" placeholder="https://.../video.mp4"></div>
+          <div class="field"><label>Thumbnail URL</label><input id="vThumb" placeholder="https://.../thumb.jpg"></div>
+          <div class="field"><label>Category</label><input id="vCategory" placeholder="Entertainment"></div>
+          <div class="field"><label>এই ভিডিওর বিজ্ঞাপন URL</label><input id="vAdUrl" placeholder="https://..."></div>
+          <div class="field"><label>প্রকাশিত?</label><select id="vPublished"><option value="true">হ্যাঁ</option><option value="false">না</option></select></div>
+          <div class="row"><button id="saveVideo">ভিডিও সেভ</button><button id="resetVideo" class="secondary">নতুন ফর্ম</button></div>
+        </div>
+        <div><h3>ভিডিও তালিকা</h3><div id="adminVideoList" class="muted">লোড হচ্ছে…</div></div>
+      </div>
+    </div>
+    <div id="adSettings" class="adminTab hidden">
+      <h3>বিজ্ঞাপন ও লেখার সেটিংস</h3>
+      <div class="two">
+        <div>
+          <div class="field"><label>Home banner HTML (শুধু বিশ্বস্ত ad code)</label><textarea id="sHomeHtml" placeholder="Adsterra HTML code"></textarea></div>
+          <div class="field"><label>প্রতি পেজে ভিডিও সংখ্যা</label><input id="sVideoLimit" type="number" min="1" max="100" value="7"></div>
+          <div class="field"><label>Watch Ad নির্দেশনা</label><textarea id="sWatchText">আগে 5 সেকেন্ড অ্যাড দেখুন তারপর ফিরে আসুন</textarea></div>
+          <div class="field"><label>Save নির্দেশনা</label><textarea id="sSaveText">ভিডিও সেভ করতে আগে 5 সেকেন্ড অ্যাড দেখুন</textarea></div>
+          <div class="field"><label>Ad বাটনের লেখা</label><input id="sAdButton" value="Watch Ad — 5 Seconds"></div>
+          <div class="field"><label>Watch বাটনের লেখা</label><input id="sWatchButton" value="Watch"></div>
+          <div class="field"><label>Save বাটনের লেখা</label><input id="sSaveButton" value="Save"></div>
+          <button id="saveSettings">সেটিংস সেভ</button>
+        </div>
+        <div>
+          <h3>প্রতি ভিডিওর বিজ্ঞাপন</h3>
+          <p class="muted">ভিডিও ফর্মে “এই ভিডিওর বিজ্ঞাপন URL” বসিয়ে সেভ করুন। ফাঁকা থাকলে ডিফল্ট বিজ্ঞাপন ব্যবহার হবে।</p>
+          <div class="field"><label>Default Ad URL</label><input id="sDefaultAdUrl" placeholder="https://..."></div>
+          <button id="saveDefaultAd" class="secondary">Default Ad সেভ</button>
+          <p class="small">বিজ্ঞাপন নেটওয়ার্কের নীতিমালা মেনে চলুন। শুধু ৫ সেকেন্ড টাইমার প্রকৃত ad view প্রমাণ করে না।</p>
+        </div>
+      </div>
+    </div>
+    <div id="uploadMedia" class="adminTab hidden">
+      <h3>R2-তে মিডিয়া আপলোড</h3>
+      <p class="muted">এটি চালাতে Cloudflare Worker deploy করে নিচের Worker URL সেট করতে হবে। বড় ভিডিও আপলোডের জন্য Worker-এ R2 binding এবং অনুমোদিত admin UID দরকার।</p>
+      <div class="field"><label>Cloudflare Worker URL</label><input id="workerUrl" placeholder="https://your-worker.workers.dev"></div>
+      <div class="field"><label>ফাইল নির্বাচন</label><input id="mediaFile" type="file" accept="video/*,image/*"></div>
+      <div class="field"><label>ফাইল কী/নাম</label><input id="mediaKey" placeholder="videos/my-video.mp4"></div>
+      <button id="uploadFile">নিরাপদে আপলোড</button>
+      <div id="uploadResult" class="muted"></div>
+    </div>
+  </section>
+  <div class="footer">ProApp Vault · Secure Firebase + pluggable media storage</div>
+</div>
+
+<div id="authModal" class="modal hidden">
+ <div class="modal-inner">
+  <div class="row"><h2 class="grow">ProApp Vault Account</h2><button id="closeAuth" class="secondary">✕</button></div>
+  <div class="field"><label>Email</label><input id="authEmail" type="email" autocomplete="email"></div>
+  <div class="field"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password"></div>
+  <div class="row"><button id="signIn">Login</button><button id="signUp" class="secondary">Create account</button></div>
+  <p class="muted small">Firebase Console-এ Email/Password sign-in চালু থাকতে হবে।</p>
+ </div>
+</div>
+<div id="videoModal" class="modal hidden">
+ <div class="modal-inner">
+  <div class="row"><h2 id="modalTitle" class="grow">Video</h2><button id="closeVideo" class="secondary">✕</button></div>
+  <video id="player" class="player" controls playsinline></video>
+  <p id="modalDescription" class="muted"></p><p id="modalMeta" class="small"></p>
+  <div class="row"><button id="likeBtn">♡ Like</button><button id="commentToggle" class="secondary">Comments</button><button id="saveBtn" class="secondary">Save</button></div>
+  <div id="unlockBox" class="panel hidden">
+    <p id="unlockText">আগে 5 সেকেন্ড অ্যাড দেখুন তারপর ফিরে আসুন</p>
+    <p class="small">বিজ্ঞাপনটি নতুন ট্যাবে খুলুন। ফিরে এসে বোতাম চাপলে অ্যাপ টাইমার ও flow যাচাই করবে; এটি বিজ্ঞাপন নেটওয়ার্কের view confirmation-এর বিকল্প নয়।</p>
+    <div class="row"><button id="openAdBtn">Watch Ad — 5 Seconds</button><button id="unlockContinue" class="secondary" disabled>ফিরে এসেছি</button></div>
+    <p id="unlockMessage" class="small"></p>
+  </div>
+  <div id="commentArea" class="hidden">
+    <h3>Comments</h3><div class="field"><textarea id="commentText" placeholder="কমেন্ট লিখুন…"></textarea></div><button id="postComment">কমেন্ট পোস্ট</button><div id="commentsList"></div>
+  </div>
+ </div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp, increment, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+// Paste your Firebase web-app config here (Firebase Console > Project settings > Your apps).
+const firebaseConfig = {
+  apiKey: "PASTE_FIREBASE_API_KEY",
+  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
+  projectId: "PASTE_PROJECT_ID",
+  storageBucket: "PASTE_PROJECT_ID.firebasestorage.app",
+  messagingSenderId: "PASTE_MESSAGING_SENDER_ID",
+  appId: "PASTE_APP_ID"
+};
+const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
+const $ = id => document.getElementById(id);
+let currentUser=null, isAdmin=false, allVideos=[], settings={}, activeVideo=null, unlockIntent="watch", adOpenedAt=0;
+const showStatus=(msg,error=false)=>{ $("status").textContent=msg; $("status").classList.remove("hidden","error"); if(error)$("status").classList.add("error"); };
+const hideStatus=()=> $("status").classList.add("hidden");
+const safeText = s => String(s??"");
+const esc = s => safeText(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const num = n => Number(n||0).toLocaleString();
+function requireAuth(){ if(!currentUser){$("authModal").classList.remove("hidden");return false;} return true; }
+function ensureConfig(){ if(firebaseConfig.apiKey.startsWith("PASTE_")||firebaseConfig.projectId.startsWith("PASTE_")){showStatus("প্রথমে index.html-এর firebaseConfig-এ তোমার Firebase Web App config বসাও।",true);return false;}return true; }
+async function getUserDoc(uid=currentUser?.uid){return (await getDoc(doc(db,"users",uid))).data()||{};}
+async function checkAdmin(){ if(!currentUser)return false; const u=await getUserDoc(); return u.role==="admin"; }
+function videoCard(v){return `<article class="video-card" data-video="${esc(v.id)}"><img class="thumb" loading="lazy" src="${esc(v.thumbnailUrl||v.thumbnail_url||"https://placehold.co/640x400/171c2c/aaa?text=ProApp+Vault")}" alt=""><div class="card-body"><div class="card-title">${esc(v.title||"Untitled video")}</div><div class="small">▶ ${num(v.views)} views · ${esc(v.category||"Video")}</div></div></article>`;}
+function bindCards(){document.querySelectorAll("[data-video]").forEach(el=>el.onclick=()=>openVideo(el.dataset.video));}
+async function loadSettings(){try{const s=await getDoc(doc(db,"appSettings","public"));settings=s.exists()?s.data():{};}catch(e){settings={};} $("homeAd").innerHTML=""; if(settings.homeAdHtml){const frame=document.createElement("iframe");frame.setAttribute("sandbox","allow-scripts allow-popups allow-popups-to-escape-sandbox");frame.style="width:100%;min-height:80px;border:0";frame.srcdoc=settings.homeAdHtml;$("homeAd").append(frame);}else{$("homeAd").textContent="বিজ্ঞাপনের স্থান";} $("sVideoLimit").value=settings.videoLimit||7; $("sWatchText").value=settings.watchText||"আগে 5 সেকেন্ড অ্যাড দেখুন তারপর ফিরে আসুন"; $("sSaveText").value=settings.saveText||"ভিডিও সেভ করতে আগে 5 সেকেন্ড অ্যাড দেখুন"; $("sAdButton").value=settings.adButtonText||"Watch Ad — 5 Seconds"; $("sWatchButton").value=settings.watchButtonText||"Watch"; $("sSaveButton").value=settings.saveButtonText||"Save"; $("sHomeHtml").value=settings.homeAdHtml||""; $("sDefaultAdUrl").value=settings.defaultAdUrl||"";}
+async function loadVideos(){try{const snap=await getDocs(query(collection(db,"videos"),where("published","==",true)));allVideos=snap.docs.map(d=>({id:d.id,...d.data()}));allVideos.sort((a,b)=>(b.views||0)-(a.views||0));renderVideos();}catch(e){showStatus("ভিডিও লোড হয়নি: "+e.message,true);$("videos").innerHTML='<p class="muted">Firestore rules / videos collection চেক করুন।</p>';}}
+function renderVideos(){const term=$("search").value.trim().toLowerCase(),list=allVideos.filter(v=>(v.title||"").toLowerCase().includes(term)||(v.category||"").toLowerCase().includes(term));const count=Number(settings.videoLimit||7);$("popular").innerHTML=list.slice(0,4).map(videoCard).join("")||'<p class="muted">এখনও কোনো ভিডিও নেই।</p>';$("videos").innerHTML=list.slice(0,count).map(videoCard).join("")||'<p class="muted">কোনো ভিডিও পাওয়া যায়নি।</p>';$("videoCount").textContent=list.length+" videos";bindCards();}
+async function openVideo(id){activeVideo=allVideos.find(v=>v.id===id);if(!activeVideo)return; $("videoModal").classList.remove("hidden");$("modalTitle").textContent=activeVideo.title||"Video";$("modalDescription").textContent=activeVideo.description||"";$("modalMeta").textContent=`${num(activeVideo.views)} views · ${activeVideo.category||"Video"}`;$("player").src=activeVideo.videoUrl||activeVideo.video_url||"";$("player").controls=false;$("unlockBox").classList.remove("hidden");$("unlockText").textContent=settings.watchText||"আগে 5 সেকেন্ড অ্যাড দেখুন তারপর ফিরে আসুন";$("openAdBtn").textContent=settings.adButtonText||"Watch Ad — 5 Seconds";$("unlockContinue").textContent=settings.watchButtonText||"Watch";$("unlockContinue").disabled=true;$("unlockMessage").textContent="";$("commentArea").classList.add("hidden");await updateLikeButton();await loadComments();unlockIntent="watch";try{await runTransaction(db,async tx=>{const ref=doc(db,"videos",id);const snap=await tx.get(ref);if(snap.exists())tx.update(ref,{views:increment(1)});});activeVideo.views=(activeVideo.views||0)+1;$("modalMeta").textContent=`${num(activeVideo.views)} views · ${activeVideo.category||"Video"}`;}catch(e){}}
+async function updateLikeButton(){if(!activeVideo)return; if(!currentUser){$("likeBtn").textContent="♡ Like";return;}const id=activeVideo.id+"_"+currentUser.uid;const s=await getDoc(doc(db,"likes",id));$("likeBtn").textContent=s.exists()?"♥ Liked":"♡ Like";}
+async function likeVideo(){if(!requireAuth())return;const ref=doc(db,"likes",activeVideo.id+"_"+currentUser.uid),vref=doc(db,"videos",activeVideo.id);try{await runTransaction(db,async tx=>{const s=await tx.get(ref);if(s.exists()){tx.delete(ref);tx.update(vref,{likes:increment(-1)});}else{tx.set(ref,{videoId:activeVideo.id,userId:currentUser.uid,createdAt:serverTimestamp()});tx.update(vref,{likes:increment(1)});}});await updateLikeButton();}catch(e){showStatus("Like করা যায়নি: "+e.message,true);}}
+async function loadComments(){if(!activeVideo)return;try{const snap=await getDocs(query(collection(db,"comments"),where("videoId","==",activeVideo.id)));const arr=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));$("commentsList").innerHTML=arr.map(c=>`<div class="listrow"><b>${esc(c.displayName||"User")}</b><div>${esc(c.text)}</div><div class="small">${c.createdAt?.toDate?c.createdAt.toDate().toLocaleString():""}</div></div>`).join("")||'<p class="muted">এখনও কোনো কমেন্ট নেই।</p>';}catch(e){$("commentsList").textContent="কমেন্ট লোড হয়নি।";}}
+async function postComment(){if(!requireAuth())return;const text=$("commentText").value.trim();if(!text)return;if(text.length>1500){showStatus("কমেন্ট ১৫০০ অক্ষরের মধ্যে রাখুন।",true);return;}try{await addDoc(collection(db,"comments"),{videoId:activeVideo.id,userId:currentUser.uid,displayName:currentUser.displayName||currentUser.email||"User",text,createdAt:serverTimestamp()});$("commentText").value="";await loadComments();}catch(e){showStatus("কমেন্ট পোস্ট হয়নি: "+e.message,true);}}
+async function saveVideo(){if(!requireAuth())return;unlockIntent="save";startUnlock();}
+function startUnlock(){const adUrl=activeVideo?.adUrl||activeVideo?.ad_url||settings.defaultAdUrl||"";$("unlockBox").classList.remove("hidden");$("unlockText").textContent=unlockIntent==="save"?(settings.saveText||"ভিডিও সেভ করতে আগে 5 সেকেন্ড অ্যাড দেখুন"):(settings.watchText||"আগে 5 সেকেন্ড অ্যাড দেখুন তারপর ফিরে আসুন");$("openAdBtn").textContent=settings.adButtonText||"Watch Ad — 5 Seconds";$("unlockContinue").textContent=unlockIntent==="save"?(settings.saveButtonText||"Save"):(settings.watchButtonText||"Watch");$("unlockContinue").disabled=true;$("unlockMessage").textContent="";$("openAdBtn").onclick=()=>{if(!adUrl){$("unlockMessage").textContent="এই ভিডিওর জন্য Admin Panel-এ বিজ্ঞাপন URL সেট করা হয়নি।";return;}window.open(adUrl,"_blank","noopener,noreferrer");adOpenedAt=Date.now();$("unlockContinue").disabled=false;$("unlockMessage").textContent="বিজ্ঞাপন খুলেছে। নির্দেশনা অনুযায়ী ফিরে আসুন।";};}
+async function completeUnlock(){if(!adOpenedAt||Date.now()-adOpenedAt<5000){$("unlockMessage").textContent="অনুগ্রহ করে অন্তত ৫ সেকেন্ড অপেক্ষা করুন।";return;}if(unlockIntent==="save"){if(!requireAuth())return;try{await setDoc(doc(db,"savedVideos",currentUser.uid+"_"+activeVideo.id),{userId:currentUser.uid,videoId:activeVideo.id,savedAt:serverTimestamp()});$("unlockMessage").textContent="ভিডিও Saved তালিকায় যোগ হয়েছে।";}catch(e){$("unlockMessage").textContent="সেভ করা যায়নি: "+e.message;}}else{$("player").controls=true;$("player").play().catch(()=>{});$("unlockBox").classList.add("hidden");}}
+async function saveVideoDoc(){if(!currentUser)return;const id=$("editVideoId").value.trim();const data={title:$("vTitle").value.trim(),description:$("vDescription").value.trim(),videoUrl:$("vUrl").value.trim(),thumbnailUrl:$("vThumb").value.trim(),category:$("vCategory").value.trim(),adUrl:$("vAdUrl").value.trim(),published:$("vPublished").value==="true",updatedAt:serverTimestamp()};if(!data.title||!data.videoUrl){showStatus("ভিডিওর নাম ও URL দিতে হবে।",true);return;}try{if(id){await updateDoc(doc(db,"videos",id),data);}else{data.views=0;data.likes=0;data.createdAt=serverTimestamp();await addDoc(collection(db,"videos"),data);}showStatus("ভিডিও সেভ হয়েছে।");resetVideoForm();await loadVideos();await loadAdminVideoList();}catch(e){showStatus("ভিডিও সেভ হয়নি: "+e.message,true);}}
+function resetVideoForm(){["editVideoId","vTitle","vDescription","vUrl","vThumb","vCategory","vAdUrl"].forEach(id=>$(id).value="");$("vPublished").value="true";}
+async function loadAdminVideoList(){if(!isAdmin)return;try{const snap=await getDocs(collection(db,"videos"));$("adminVideoList").innerHTML=snap.docs.map(d=>{const v=d.data();return `<div class="listrow"><b>${esc(v.title||"Untitled")}</b><div class="small">${esc(d.id)} · ${num(v.views)} views · ${v.published?"Published":"Hidden"}</div><div class="row" style="margin-top:7px"><button class="secondary" data-edit="${esc(d.id)}">Edit</button><button class="danger" data-delete="${esc(d.id)}">Delete</button></div></div>`}).join("")||"কোনো ভিডিও নেই";document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{const v=allVideos.find(x=>x.id===b.dataset.edit);if(!v)return;$("editVideoId").value=v.id;$("vTitle").value=v.title||"";$("vDescription").value=v.description||"";$("vUrl").value=v.videoUrl||v.video_url||"";$("vThumb").value=v.thumbnailUrl||v.thumbnail_url||"";$("vCategory").value=v.category||"";$("vAdUrl").value=v.adUrl||v.ad_url||"";$("vPublished").value=String(v.published!==false);document.querySelector('[data-tab="manageVideos"]').click();});document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=async()=>{if(!confirm("এই ভিডিওর Firestore record মুছবেন? Media file আলাদাভাবে মুছতে হতে পারে।"))return;try{await deleteDoc(doc(db,"videos",b.dataset.delete));await loadVideos();await loadAdminVideoList();}catch(e){showStatus(e.message,true);}});}catch(e){$("adminVideoList").textContent="তালিকা লোড হয়নি: "+e.message;}}
+async function saveAdminSettings(){const data={homeAdHtml:$("sHomeHtml").value,videoLimit:Math.max(1,Math.min(100,Number($("sVideoLimit").value)||7)),watchText:$("sWatchText").value,saveText:$("sSaveText").value,adButtonText:$("sAdButton").value,watchButtonText:$("sWatchButton").value,saveButtonText:$("sSaveButton").value,updatedAt:serverTimestamp()};try{await setDoc(doc(db,"appSettings","public"),data,{merge:true});settings={...settings,...data};await loadSettings();renderVideos();showStatus("সেটিংস সেভ হয়েছে।");}catch(e){showStatus("সেটিংস সেভ হয়নি: "+e.message,true);}}
+async function saveDefaultAd(){try{await setDoc(doc(db,"appSettings","public"),{defaultAdUrl:$("sDefaultAdUrl").value.trim(),updatedAt:serverTimestamp()},{merge:true});settings.defaultAdUrl=$("sDefaultAdUrl").value.trim();showStatus("Default Ad URL সেভ হয়েছে।");}catch(e){showStatus(e.message,true);}}
+async function showAdmin(){if(!requireAuth())return;isAdmin=await checkAdmin();if(!isAdmin){showStatus("এই অ্যাকাউন্টে Admin permission নেই।",true);return;}$("adminPanel").classList.remove("hidden");$("adminBtn").classList.remove("hidden");await loadAdminVideoList();await loadAdminStats();window.scrollTo({top:$("adminPanel").offsetTop,behavior:"smooth"});}
+async function loadAdminStats(){try{const [u,v,l,c]=await Promise.all([getDocs(collection(db,"users")),getDocs(collection(db,"videos")),getDocs(collection(db,"likes")),getDocs(collection(db,"comments"))]);$("statUsers").textContent=num(u.size);$("statVideos").textContent=num(v.size);$("statLikes").textContent=num(l.size);$("statComments").textContent=num(c.size);$("statViews").textContent=num(v.docs.reduce((s,d)=>s+(d.data().views||0),0));}catch(e){showStatus("Dashboard metrics পড়া যায়নি: "+e.message,true);}}
+$("loginBtn").onclick=()=>$("authModal").classList.remove("hidden");$("closeAuth").onclick=()=>$("authModal").classList.add("hidden");$("closeVideo").onclick=()=>{$("player").pause();$("player").src="";$("videoModal").classList.add("hidden")};$("logoutBtn").onclick=()=>signOut(auth);$("adminBtn").onclick=showAdmin;$("closeAdmin").onclick=()=>$("adminPanel").classList.add("hidden");$("search").oninput=renderVideos;$("likeBtn").onclick=likeVideo;$("saveBtn").onclick=saveVideo;$("commentToggle").onclick=()=>$("commentArea").classList.toggle("hidden");$("postComment").onclick=postComment;$("openAdBtn").onclick=()=>startUnlock();$("unlockContinue").onclick=completeUnlock;$("saveVideo").onclick=saveVideoDoc;$("resetVideo").onclick=resetVideoForm;$("saveSettings").onclick=saveAdminSettings;$("saveDefaultAd").onclick=saveDefaultAd;$("uploadFile").onclick=async()=>{if(!requireAuth())return;const file=$("mediaFile").files[0],worker=$("workerUrl").value.trim(),key=$("mediaKey").value.trim();if(!file||!worker||!key){$("uploadResult").textContent="ফাইল, Worker URL ও key দিন।";return;}try{const token=await currentUser.getIdToken();const res=await fetch(worker.replace(/\/$/,"")+"/upload?key="+encodeURIComponent(key),{method:"POST",headers:{"Authorization":"Bearer "+token,"Content-Type":file.type||"application/octet-stream"},body:file});const data=await res.json();if(!res.ok)throw new Error(data.error||"Upload failed");$("uploadResult").innerHTML=`Upload complete: <a href="${esc(data.url)}" target="_blank" rel="noopener">ফাইল খুলুন</a>`;}catch(e){$("uploadResult").textContent="Upload failed: "+e.message;}};
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".adminTab").forEach(x=>x.classList.toggle("hidden",x.id!==b.dataset.tab));});
+$("signIn").onclick=async()=>{if(!ensureConfig())return;try{await signInWithEmailAndPassword(auth,$("authEmail").value.trim(),$("authPassword").value);$("authModal").classList.add("hidden");hideStatus();}catch(e){showStatus(e.message,true);}};
+$("signUp").onclick=async()=>{if(!ensureConfig())return;try{const cred=await createUserWithEmailAndPassword(auth,$("authEmail").value.trim(),$("authPassword").value);await setDoc(doc(db,"users",cred.user.uid),{uid:cred.user.uid,email:cred.user.email,displayName:cred.user.displayName||"",role:"user",createdAt:serverTimestamp(),lastSeenAt:serverTimestamp()});$("authModal").classList.add("hidden");showStatus("অ্যাকাউন্ট তৈরি হয়েছে।");}catch(e){showStatus(e.message,true);}};
+onAuthStateChanged(auth,async user=>{currentUser=user;if(user){$("loginBtn").classList.add("hidden");$("logoutBtn").classList.remove("hidden");try{const ref=doc(db,"users",user.uid),s=await getDoc(ref);if(!s.exists())await setDoc(ref,{uid:user.uid,email:user.email,role:"user",createdAt:serverTimestamp(),lastSeenAt:serverTimestamp()},{merge:true});else await updateDoc(ref,{lastSeenAt:serverTimestamp()});isAdmin=await checkAdmin();if(isAdmin)$("adminBtn").classList.remove("hidden");}catch(e){} }else{$("loginBtn").classList.remove("hidden");$("logoutBtn").classList.add("hidden");$("adminBtn").classList.add("hidden");isAdmin=false;}});
+if(ensureConfig()){await loadSettings();await loadVideos();}
+</script>
+</body></html>
